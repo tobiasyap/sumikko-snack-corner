@@ -35,7 +35,7 @@ export default function Navbar() {
           {[
             { to: '/', label: 'Snack Machine' },
             { to: '/archive', label: 'Snack Diary' },
-            { to: '/settings', label: 'Settings' },
+            { to: '/settings', label: 'Settings (WIP)' },
           ].map((link) => (
             <NavLink
               key={link.to}
