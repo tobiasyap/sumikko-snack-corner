@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+*.db
+*.db-journal
+server/uploads/*
+!server/uploads/.gitkeep
+server/generated/
+server/src/generated/

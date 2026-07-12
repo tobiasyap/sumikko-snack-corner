@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  gmailAppPass String?
+  createdAt    DateTime @default(now())
+
+  snacks         Snack[]
+  archivedSnacks ArchivedSnack[]
+}
+
+model Snack {
+  id             Int       @id @default(autoincrement())
+  name           String
+  expiryDate     DateTime
+  expiryIsApprox Boolean   @default(false)
+  imagePath      String?
+  characterType  String
+  slotPosition   Int
+  notifiedAt     DateTime?
+  createdAt      DateTime  @default(now())
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+}
+
+model ArchivedSnack {
+  id             Int      @id @default(autoincrement())
+  name           String
+  imagePath      String?
+  rating         Int
+  eatenAt        DateTime @default(now())
+  originalExpiry DateTime
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+}

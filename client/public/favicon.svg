@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Vending machine body -->
+  <rect x="8" y="4" width="48" height="56" rx="8" fill="#FFE4E8" stroke="#D4A0A8" stroke-width="2"/>
+  <!-- Glass window -->
+  <rect x="14" y="12" width="36" height="32" rx="4" fill="#E8F4FF" stroke="#D4C8E8" stroke-width="1.5"/>
+  <!-- Shelves -->
+  <line x1="14" y1="23" x2="50" y2="23" stroke="#C8B8C8" stroke-width="1"/>
+  <line x1="14" y1="33" x2="50" y2="33" stroke="#C8B8C8" stroke-width="1"/>
+  <!-- Snack dots -->
+  <circle cx="22" cy="17.5" r="3" fill="#FFB7C5"/>
+  <circle cx="32" cy="17.5" r="3" fill="#B8E8D0"/>
+  <circle cx="42" cy="17.5" r="3" fill="#FFF0B3"/>
+  <circle cx="22" cy="28" r="3" fill="#D4C8E8"/>
+  <circle cx="32" cy="28" r="3" fill="#FFD4B8"/>
+  <circle cx="42" cy="28" r="3" fill="#B8D8F0"/>
+  <!-- Dispense opening -->
+  <rect x="18" y="48" width="28" height="8" rx="4" fill="#5D4E60"/>
+  <!-- Tiny eyes on machine (cute face) -->
+  <circle cx="28" cy="39" r="1.5" fill="#5D4E60"/>
+  <circle cx="36" cy="39" r="1.5" fill="#5D4E60"/>
+</svg>

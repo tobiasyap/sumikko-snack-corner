@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: sumikko-snack-corner
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm --prefix client install && npm --prefix server install && npm run build && cd server && npx prisma db push
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ENCRYPTION_KEY
+        generateValue: true
+      - key: NODE_ENV
+        value: production

@@ -1,0 +1,16 @@
+{
+  "name": "sumikko-snack-corner",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:client": "npm --prefix client run dev",
+    "dev:server": "npm --prefix server run dev",
+    "db:push": "cd server && npx prisma db push",
+    "db:studio": "cd server && npx prisma studio",
+    "build": "npm --prefix client run build && cd server && npx prisma generate && npx tsc",
+    "start": "node server/dist/index.js"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
