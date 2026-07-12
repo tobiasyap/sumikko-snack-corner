@@ -612,10 +612,6 @@ button:disabled,
    9. Snack Bubble (Tooltip)
    ------------------------------------------------------------ */
 .snack-bubble {
-  position: absolute;
-  bottom: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
   background-color: var(--bg-card);
   border-radius: var(--radius-md);
   padding: 10px 16px;
@@ -627,13 +623,7 @@ button:disabled,
 }
 
 .snack-bubble::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 6px solid transparent;
-  border-top-color: var(--bg-card);
+  display: none;
 }
 
 .snack-bubble-name {
@@ -1520,4 +1510,47 @@ button:disabled,
   .auth-header h1 {
     font-size: 1.3rem;
   }
+}
+
+/* ------------------------------------------------------------
+   Modal & Form Button Hover Effects
+   ------------------------------------------------------------ */
+.eat-snack-cancel-btn:hover,
+.eat-snack-back-btn:hover,
+.add-snack-cancel-btn:hover,
+.undo-toast-back-btn:hover,
+.archive-rating-cancel-btn:hover {
+  background-color: #F5EDE8 !important;
+  border-color: #D4C8C0 !important;
+  color: #5D4E60 !important;
+}
+
+.eat-snack-eat-btn:hover,
+.eat-snack-confirm-btn:hover:not(:disabled),
+.add-snack-submit-btn:hover:not(:disabled),
+.undo-toast-confirm-btn:hover:not(:disabled),
+.archive-rating-confirm-btn:hover:not(:disabled) {
+  background-color: #FF9AB0 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 183, 197, 0.4) !important;
+}
+
+.add-snack-upload-btn:hover {
+  background-color: rgba(212, 200, 232, 0.15) !important;
+  border-color: #B8A8D8 !important;
+}
+
+.undo-toast-undo-btn:hover {
+  background-color: #EDE6F5 !important;
+}
+
+.undo-toast-rate-btn:hover {
+  background-color: #FF9AB0 !important;
+}
+
+.undo-toast-rating-circle:not(.selected):hover,
+.archive-rating-circle:not(.selected):hover {
+  background-color: #FFF0F3 !important;
+  border-color: #FFB7C5 !important;
+  transform: scale(1.1);
 }

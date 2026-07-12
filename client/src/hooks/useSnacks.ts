@@ -25,7 +25,7 @@ export function useEatSnack() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, rating }: { id: number; rating: number }) =>
+    mutationFn: ({ id, rating }: { id: number; rating?: number }) =>
       api.post<ArchivedSnack>(`/snacks/${id}/eat`, { rating }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['snacks'] });

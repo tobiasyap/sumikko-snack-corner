@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 import { useSnacks, useEatSnack, useRefreshSnacks } from '../hooks/useSnacks';
+import { useUndoEat, useUpdateRating } from '../hooks/useArchive';
 import { Snack } from '../types';
 import VendingMachine from '../components/VendingMachine/VendingMachine';
 import AddSnackForm from '../components/Snacks/AddSnackForm';
@@ -12,6 +13,8 @@ import SumikkoCharacter from '../components/Characters/SumikkoCharacter';
 export default function HomePage() {
   const { data: snacks, isLoading } = useSnacks();
   const eatSnack = useEatSnack();
+  const undoEat = useUndoEat();
+  const updateRating = useUpdateRating();
   const refreshSnacks = useRefreshSnacks();
 
   const [showAddForm, setShowAddForm] = useState(false);
@@ -22,10 +25,11 @@ export default function HomePage() {
   const [addTargetPos, setAddTargetPos] = useState<{ x: number; y: number } | null>(null);
   const [eatingSnack, setEatingSnack] = useState<Snack | null>(null);
   const [eatSourcePos, setEatSourcePos] = useState<{ x: number; y: number } | null>(null);
+  const eatingSnackRef = useRef<Snack | null>(null);
 
   // Undo state
   const [undoSnack, setUndoSnack] = useState<Snack | null>(null);
-  const [showRating, setShowRating] = useState(false);
+  const [archivedSnackId, setArchivedSnackId] = useState<number | null>(null);
 
   const slotRefs = useRef<Map<number, HTMLDivElement>>(new Map());
 
@@ -59,32 +63,49 @@ export default function HomePage() {
 
   function handleEat(snack: Snack) {
     setSelectedSnack(null);
+    eatingSnackRef.current = snack;
     const pos = getSlotPosition(snack.slotPosition);
     setEatSourcePos(pos);
     setEatingSnack(snack);
   }
 
-  function handleEatAnimationComplete() {
+  const handleEatAnimationComplete = useCallback(() => {
+    const snack = eatingSnackRef.current;
+    eatingSnackRef.current = null;
     setEatingSnack(null);
     setEatSourcePos(null);
-    if (eatingSnack) {
-      setUndoSnack(eatingSnack);
+    if (snack) {
+      eatSnack.mutate(
+        { id: snack.id },
+        {
+          onSuccess: (archivedSnack) => {
+            setArchivedSnackId(archivedSnack.id);
+            setUndoSnack(snack);
+          },
+        }
+      );
     }
-  }
+  }, [eatSnack]);
 
   function handleUndo() {
+    if (archivedSnackId) {
+      undoEat.mutate(archivedSnackId);
+    }
     setUndoSnack(null);
-    setShowRating(false);
+    setArchivedSnackId(null);
   }
 
-  function handleConfirmEat() {
-    setShowRating(true);
+  function handleRate(rating: number) {
+    if (archivedSnackId) {
+      updateRating.mutate({ id: archivedSnackId, rating });
+    }
+    setUndoSnack(null);
+    setArchivedSnackId(null);
   }
 
-  function handleRate(snack: Snack, rating: number) {
-    eatSnack.mutate({ id: snack.id, rating });
+  function handleDismiss() {
     setUndoSnack(null);
-    setShowRating(false);
+    setArchivedSnackId(null);
   }
 
   if (isLoading) {
@@ -133,21 +154,13 @@ export default function HomePage() {
         onComplete={handleEatAnimationComplete}
       />
 
-      {undoSnack && !showRating && (
+      {undoSnack && (
         <UndoToast
           visible={true}
           snackName={undoSnack.name}
           onUndo={handleUndo}
-          onConfirm={handleConfirmEat}
-        />
-      )}
-
-      {undoSnack && showRating && (
-        <EatSnackModal
-          snack={undoSnack}
-          onEat={(snack: Snack, rating: number) => handleRate(snack, rating)}
-          onCancel={handleUndo}
-          startAtRating
+          onRate={handleRate}
+          onDismiss={handleDismiss}
         />
       )}
     </div>

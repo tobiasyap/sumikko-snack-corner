@@ -6,7 +6,15 @@ import prisma from '../lib/prisma.js';
 import { AuthRequest, authMiddleware } from '../middleware/authMiddleware.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const CHARACTERS = ['shirokuma', 'penguin', 'tonkatsu', 'neko', 'tokage'] as const;
+const CHARACTERS = ['shirokuma', 'penguin', 'tonkatsu', 'neko', 'tokage', 'yamapenguin'] as const;
+
+let characterBag: string[] = [];
+function nextCharacter(): string {
+  if (characterBag.length === 0) {
+    characterBag = [...CHARACTERS].sort(() => Math.random() - 0.5);
+  }
+  return characterBag.pop()!;
+}
 
 const storage = multer.diskStorage({
   destination: path.join(__dirname, '../../uploads'),
@@ -61,7 +69,7 @@ router.post('/', upload.single('image'), async (req: AuthRequest, res: Response)
     let nextSlot = 0;
     while (usedPositions.has(nextSlot)) nextSlot++;
 
-    const characterType = CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
+    const characterType = nextCharacter();
 
     const snack = await prisma.snack.create({
       data: {
@@ -107,7 +115,7 @@ router.post('/:id/eat', async (req: AuthRequest, res: Response) => {
     const id = parseInt(req.params.id as string);
     const { rating } = req.body;
 
-    if (!rating || rating < 1 || rating > 10) {
+    if (rating !== undefined && rating !== null && (rating < 1 || rating > 10)) {
       res.status(400).json({ error: 'Rating must be between 1 and 10' });
       return;
     }
@@ -126,8 +134,11 @@ router.post('/:id/eat', async (req: AuthRequest, res: Response) => {
         data: {
           name: snack.name,
           imagePath: snack.imagePath,
-          rating: parseInt(rating),
+          rating: rating ? parseInt(rating) : null,
           originalExpiry: snack.expiryDate,
+          expiryIsApprox: snack.expiryIsApprox,
+          characterType: snack.characterType,
+          slotPosition: snack.slotPosition,
           userId: req.userId!,
         },
       }),

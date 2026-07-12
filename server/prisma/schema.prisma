@@ -37,9 +37,12 @@ model ArchivedSnack {
   id             Int      @id @default(autoincrement())
   name           String
   imagePath      String?
-  rating         Int
+  rating         Int?
   eatenAt        DateTime @default(now())
   originalExpiry DateTime
+  expiryIsApprox Boolean  @default(false)
+  characterType  String?
+  slotPosition   Int?
 
   userId Int
   user   User @relation(fields: [userId], references: [id])

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Snack, CharacterType } from '../../types';
-import SumikkoCharacter, { getRandomCharacter } from '../Characters/SumikkoCharacter';
+import { Snack } from '../../types';
+import SumikkoCharacter from '../Characters/SumikkoCharacter';
 import SnackIcon from '../Snacks/SnackIcon';
 
 interface AddSnackAnimationProps {
@@ -14,7 +14,6 @@ type Phase = 'enter' | 'walk' | 'deliver' | 'wave' | 'exit';
 
 export default function AddSnackAnimation({ snack, targetPosition, onComplete }: AddSnackAnimationProps) {
   const [phase, setPhase] = useState<Phase | null>(null);
-  const [character, setCharacter] = useState<CharacterType>('shirokuma');
 
   useEffect(() => {
     if (!snack || !targetPosition) {
@@ -22,7 +21,6 @@ export default function AddSnackAnimation({ snack, targetPosition, onComplete }:
       return;
     }
 
-    setCharacter(getRandomCharacter());
     setPhase('enter');
 
     const timers: ReturnType<typeof setTimeout>[] = [];
@@ -72,7 +70,7 @@ export default function AddSnackAnimation({ snack, targetPosition, onComplete }:
           }}
           style={{ position: 'absolute', zIndex: 2 }}
         >
-          <SumikkoCharacter type={character} size={100} />
+          <SumikkoCharacter type={snack.characterType} size={100} />
         </motion.div>
       </AnimatePresence>
 

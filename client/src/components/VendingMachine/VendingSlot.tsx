@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Snack } from '../../types';
 import { getExpiryStatus } from '../../utils/dateUtils';
 import SnackIcon from '../Snacks/SnackIcon';
@@ -44,6 +44,7 @@ function CoilSVG() {
 
 export default function VendingSlot({ snack, onClick, isEmpty }: VendingSlotProps) {
   const [hovered, setHovered] = useState(false);
+  const slotRef = useRef<HTMLDivElement>(null);
 
   if (isEmpty || !snack) {
     return (
@@ -90,6 +91,7 @@ export default function VendingSlot({ snack, onClick, isEmpty }: VendingSlotProp
 
   return (
     <div
+      ref={slotRef}
       className="vending-slot vending-slot-occupied"
       style={{
         width: '100%',
@@ -139,7 +141,7 @@ export default function VendingSlot({ snack, onClick, isEmpty }: VendingSlotProp
       />
 
       {/* Hover tooltip */}
-      <SnackBubble snack={snack} visible={hovered} />
+      <SnackBubble snack={snack} visible={hovered} anchorEl={slotRef.current} />
     </div>
   );
 }

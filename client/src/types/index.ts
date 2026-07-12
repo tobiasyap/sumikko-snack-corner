@@ -21,9 +21,12 @@ export interface ArchivedSnack {
   id: number;
   name: string;
   imagePath: string | null;
-  rating: number;
+  rating: number | null;
   eatenAt: string;
   originalExpiry: string;
+  expiryIsApprox?: boolean;
+  characterType?: string;
+  slotPosition?: number;
   userId: number;
 }
 
@@ -31,9 +34,9 @@ export type CharacterType = 'shirokuma' | 'penguin' | 'tonkatsu' | 'neko' | 'tok
 
 export const CHARACTER_NAMES: Record<CharacterType, string> = {
   shirokuma: 'Shirokuma',
-  penguin: 'Penguin?',
+  penguin: 'Penguin (Real)',
   tonkatsu: 'Tonkatsu',
   neko: 'Neko',
   tokage: 'Tokage',
-  yamapenguin: 'Yama Penguin',
+  yamapenguin: 'Yamapenguin?',
 };
